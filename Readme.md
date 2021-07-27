@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Неопознанный Квокка](https://up.htmlacademy.ru/ecmascript/15/user/475753).
-* Наставник: `Неизвестно`.
+* Наставник: [Виктор Кан](https://htmlacademy.ru/profile/viktorkan).
 
 ---
 
