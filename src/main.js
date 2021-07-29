@@ -1,18 +1,12 @@
-import {
-  createMainMenuInfoTemplate,
-  createMainMenuTripControlTemplate,
-  createMainMenuFiltersTemplate,
-  createEventsSortTemplate,
-  createEventsListTemplate,
-  createEventsListItemTemplate,
-  createEventPointEditorTemplate,
-  createEventEditorOfferTemplate,
-  createEventEditorDestinationTemplate,
-  createEventEditorDetailsTemplate
-} from './utility/view-templates-proxy.js';
+import { createMainMenuInfoTemplate } from './view/menu-trip-info';
+import { createMainMenuNavigationTemplate } from './view/menu-trip-navigation';
+import { createMainMenuFiltersTemplate } from './view/menu-trip-filters';
+import { createEventsSortTemplate } from './view/events-sort';
+import { createEventsListTemplate } from './view/events-list';
+import { createEventPointEditorTemplate } from './view/event-point-editor';
+import { createEventsListItemTemplate } from './view/events-list-item';
 
 const WAY_POINT_AMOUNT = 3;
-const WITH_PHOTOS = 'yes';
 
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
@@ -24,7 +18,7 @@ const render = (container, template, place) => {
 };
 
 render(headerMainInfoElement, createMainMenuInfoTemplate(), 'afterbegin');
-render(headerNavigationElement, createMainMenuTripControlTemplate(), 'beforeend');
+render(headerNavigationElement, createMainMenuNavigationTemplate(), 'beforeend');
 render(headerFiltersElement, createMainMenuFiltersTemplate(), 'beforeend');
 render(allEventsElement, createEventsSortTemplate(), 'beforeend');
 render(allEventsElement, createEventsListTemplate(), 'beforeend');
@@ -32,15 +26,6 @@ render(allEventsElement, createEventsListTemplate(), 'beforeend');
 const eventsListElement = allEventsElement.querySelector('.trip-events__list');
 
 render(eventsListElement, createEventPointEditorTemplate(), 'beforeend');
-
-const eventEditorElement = eventsListElement.querySelector('.event--edit');
-
-render(eventEditorElement, createEventEditorDetailsTemplate(), 'beforeend');
-
-const eventDetailsElement = eventEditorElement.querySelector('.event__details');
-
-render(eventDetailsElement, createEventEditorOfferTemplate(), 'beforeend');
-render(eventDetailsElement, createEventEditorDestinationTemplate(WITH_PHOTOS), 'beforeend');
 
 for (let i = 0; i < WAY_POINT_AMOUNT; i++) {
   render(eventsListElement, createEventsListItemTemplate(), 'beforeend');
