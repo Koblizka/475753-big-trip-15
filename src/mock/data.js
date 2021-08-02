@@ -10,11 +10,11 @@ const TYPES = [
   'Restaurant',
 ];
 
-const DESTINATION_CITIES = [
-  'Chamonix',
-  'Amsterdam',
-  'Geneva',
-];
+// const DESTINATION_CITIES = [
+//   'Chamonix',
+//   'Amsterdam',
+//   'Geneva',
+// ];
 
 const OFFERS = [
   {
@@ -297,10 +297,13 @@ const BasePrice = {
   MAX: 10000,
 };
 
+const MAX_DAYS_GAP = 7;
+
 export {
   TYPES,
-  DESTINATION_CITIES,
+  // DESTINATION_CITIES,
   DESCRIPTIONS,
   OFFERS,
+  MAX_DAYS_GAP,
   BasePrice
 };

@@ -6,6 +6,8 @@ import { createEventsListTemplate } from './view/events-list';
 import { createEventPointEditorTemplate } from './view/event-point-editor';
 import { createEventsListItemTemplate } from './view/events-list-item';
 
+import { generatePoint } from './mock/point.js';
+
 const WAY_POINT_AMOUNT = 3;
 
 const headerMainInfoElement = document.querySelector('.trip-main');
@@ -30,3 +32,5 @@ render(eventsListElement, createEventPointEditorTemplate(), 'beforeend');
 for (let i = 0; i < WAY_POINT_AMOUNT; i++) {
   render(eventsListElement, createEventsListItemTemplate(), 'beforeend');
 }
+
+console.log(generatePoint());
