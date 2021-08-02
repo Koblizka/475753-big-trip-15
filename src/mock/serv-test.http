@@ -1,0 +1,15 @@
+GET /big-trip/offers HTTP/1.1
+Host: 15.ecmascript.pages.academy
+Authorization: Basic er883jdzbdw
+
+###
+
+GET /big-trip/destinations HTTP/1.1
+Host: 15.ecmascript.pages.academy
+Authorization: Basic er883jdzbdw
+
+###
+
+GET /big-trip/points HTTP/1.1
+Host: 15.ecmascript.pages.academy
+Authorization: Basic er883jdzbdw
