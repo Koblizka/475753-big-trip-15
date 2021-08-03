@@ -290,6 +290,16 @@ const DESCRIPTIONS = [
       },
     ],
   },
+  {
+    name: 'Krakow',
+    description: 'Krakow, is a capital of Krakow\'s sausage',
+    pictures: [],
+  },
+  {
+    name: 'Phoenix',
+    description: '',
+    pictures: [],
+  },
 ];
 
 const BasePrice = {
