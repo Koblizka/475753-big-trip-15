@@ -1,4 +1,4 @@
-const WAY_POINT_AMOUNT = 20;
+const WAY_POINT_AMOUNT = 10;
 const DAY_GAP = 0;
 const TIME_GAP = 7;
 const TYPES = [

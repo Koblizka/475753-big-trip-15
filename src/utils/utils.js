@@ -35,6 +35,8 @@ const getDuration = (time) => {
   return duration;
 };
 
+const sortByDate = (list) => list.slice().sort((firstItem, anotherItem) => firstItem.dateFrom - anotherItem.dateFrom);
+
 export {
   getRandomInteger,
   getTime,
@@ -42,7 +44,8 @@ export {
   getFormatedDate,
   getDayMonthFormatDate,
   getDateDifference,
-  getDuration
+  getDuration,
+  sortByDate
 };
 
 

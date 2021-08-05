@@ -5,7 +5,7 @@ import { createEventsSortTemplate } from './view/events-sort';
 import { createEventsListTemplate } from './view/events-list';
 import { createEventPointEditorTemplate } from './view/event-point-editor';
 import { createEventsListItemTemplate } from './view/events-list-item';
-import { points } from './mock/point.js';
+import { sortedPoints } from './mock/point.js';
 
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
@@ -16,7 +16,7 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(headerMainInfoElement, createMainMenuInfoTemplate(), 'afterbegin');
+render(headerMainInfoElement, createMainMenuInfoTemplate(sortedPoints), 'afterbegin');
 render(headerNavigationElement, createMainMenuNavigationTemplate(), 'beforeend');
 render(headerFiltersElement, createMainMenuFiltersTemplate(), 'beforeend');
 render(allEventsElement, createEventsSortTemplate(), 'beforeend');
@@ -24,6 +24,6 @@ render(allEventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventsListElement = allEventsElement.querySelector('.trip-events__list');
 
-render(eventsListElement, createEventPointEditorTemplate('none', points[0]), 'beforeend');
+render(eventsListElement, createEventPointEditorTemplate('none', sortedPoints[0]), 'beforeend');
 
-points.forEach((point) => render(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));
+sortedPoints.forEach((point) => render(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));

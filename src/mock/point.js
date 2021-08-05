@@ -9,14 +9,14 @@ import {
 } from './data.js';
 import {
   getRandomInteger,
-  getDate
+  getDate,
+  sortByDate
 } from '../utils/utils.js';
 import {customAlphabet} from 'nanoid';
 
 const nanoid = customAlphabet('1234567890', 5);
 
 const getRandomType = () => TYPES[getRandomInteger(0, TYPES.length - 1)];
-
 
 const getRandomArrivalDates = () => {
   const startDaysGap = getRandomInteger(-DAY_GAP, DAY_GAP);
@@ -39,4 +39,6 @@ export const generatePoint = () => ({
   offers: OFFERS[getRandomInteger(0, OFFERS.length - 1)],
 });
 
-export const points = new Array(WAY_POINT_AMOUNT).fill().map(() => generatePoint());
+const points = new Array(WAY_POINT_AMOUNT).fill().map(() => generatePoint());
+
+export const sortedPoints = sortByDate(points);
