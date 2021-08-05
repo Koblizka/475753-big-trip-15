@@ -1,3 +1,6 @@
+const WAY_POINT_AMOUNT = 20;
+const DAY_GAP = 0;
+const TIME_GAP = 7;
 const TYPES = [
   'Taxi',
   'Bus',
@@ -6,7 +9,7 @@ const TYPES = [
   'Drive',
   'Flight',
   'Check-in',
-  'Sightseeng',
+  'Sightseeing',
   'Restaurant',
 ];
 
@@ -307,13 +310,13 @@ const BasePrice = {
   MAX: 10000,
 };
 
-const MAX_DAYS_GAP = 7;
-
 export {
+  WAY_POINT_AMOUNT,
   TYPES,
   // DESTINATION_CITIES,
   DESCRIPTIONS,
   OFFERS,
-  MAX_DAYS_GAP,
+  DAY_GAP,
+  TIME_GAP,
   BasePrice
 };

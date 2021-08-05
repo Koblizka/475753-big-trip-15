@@ -1,12 +1,14 @@
-const SHORT_OFFER_NAME_LENGTH = 2;
-const LAST_OFFER_NAME_WORD = 1;
+import {getFormatedDate} from '../utils/utils.js';
+
+const OFFER_NAME_LENGTH = 2;
+const OFFER_NAME_WORD_LENGTH = 1;
 
 const getOfferName = (offerTitle) => {
   const tempName = offerTitle.split(' ');
 
-  return (tempName.length <= SHORT_OFFER_NAME_LENGTH) ?
+  return (tempName.length <= OFFER_NAME_LENGTH) ?
     tempName.pop() :
-    tempName.slice(-SHORT_OFFER_NAME_LENGTH, -LAST_OFFER_NAME_WORD).pop();
+    tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
 };
 
 export const createEventPointEditorTemplate = (isEditMode, point) => {
@@ -28,7 +30,7 @@ export const createEventPointEditorTemplate = (isEditMode, point) => {
     : '<button class="event__reset-btn" type="reset">Cancel</button>';
 
 
-  const offersTemplates = offers.map((offer) => `<div class="event__offer-selector">
+  const pointOffers = offers.map((offer) => `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferName(offer.title)}-1"
     type="checkbox" name="event-offer-${getOfferName(offer.title)}">
     <label class="event__offer-label" for="event-offer-${getOfferName(offer.title)}-1">
@@ -42,17 +44,17 @@ export const createEventPointEditorTemplate = (isEditMode, point) => {
     ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-    ${offersTemplates.join('')}
+    ${pointOffers.join('')}
     </div>
   </section>`
     : '';
 
-  const photosTemplates = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
+  const photo = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
 
   const isPhotos = (Array.isArray(pictures) && pictures.length)
     ? `<div class="event__photos-container">
     <div class="event__photos-tape">
-      ${photosTemplates.join('')}
+      ${photo.join('')}
     </div>
   </div>`
     : '';
@@ -146,10 +148,10 @@ export const createEventPointEditorTemplate = (isEditMode, point) => {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${point.dateFrom}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedDate(point.dateFrom)}">
           —
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${point.dateTo}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatedDate(point.dateTo)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
