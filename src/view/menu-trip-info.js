@@ -12,7 +12,7 @@ export const createMainMenuInfoTemplate = (points) => {
     ? `${dateFromUnits[0]} ${dateFromUnits[1]}&nbsp;&mdash;&nbsp;${dateToUnits[1]}`
     : `${dateFromUnits[0]} ${dateFromUnits[1]}&nbsp;&mdash;&nbsp;${dateToUnits[0]} ${dateToUnits[1]}`;
 
-  const getTotalTripPrice = points.reduce((acc, currentPoint) => currentPoint.basePrice, 0);
+  const getTotalTripPrice = points.reduce((acc, currentPoint) => acc + currentPoint.basePrice, 0);
 
   return `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
