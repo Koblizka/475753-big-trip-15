@@ -17,7 +17,14 @@ const getRollupButton = () => (
   </button>`
 );
 
-const getOfferTemplate = (offer) => (
+const getDetails = (offers, destination) => (
+  `<section class="event__details">
+    ${offers}
+    ${destination}
+  </section>`
+);
+
+const getOffer = (offer) => (
   `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferName(offer.title)}-1"
     type="checkbox" name="event-offer-${getOfferName(offer.title)}">
@@ -29,28 +36,32 @@ const getOfferTemplate = (offer) => (
   </div>`
 );
 
-const getOffersListTemplate = (offers) => (
+const getOffers = (offers) => offers.map((offer) => getOffer(offer)).join('');
+
+const getOffersList = (offers) => (
   `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-    ${offers}
+    ${getOffers(offers)}
     </div>
   </section>`
 );
 
-const getPhotoTemplate = (photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`;
+const getPhoto = (photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`;
 
-const getPhotosListTemplate = (photos) => (
+const getPhotos = (photos) => photos.map((photo) => getPhoto(photo)).join('');
+
+const getPhotosList = (photos) => (
   `<div class="event__photos-container">
     <div class="event__photos-tape">
-      ${photos}
+      ${getPhotos(photos)}
     </div>
   </div>`
 );
 
-const getDescriptionTemplate = (description) => `<p class="event__destination-description">${description}</p>`;
+const getDescription = (description) => `<p class="event__destination-description">${description}</p>`;
 
-const getDestinationTemplate = (description, photos) => (
+const getDestination = (description, photos) => (
   `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     ${description}
@@ -69,24 +80,26 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
     pictures,
   } = point.destination;
 
-  const pointOffers = offers.map((offer) => getOfferTemplate(offer));
-  const photos = pictures.map((picture) => getPhotoTemplate(picture));
-  const pointDescription = getDescriptionTemplate(description);
+  const pointDescription = getDescription(description);
 
   const isRollup = (editorModeButton === 'Delete')
     ? getRollupButton()
     : '';
 
-  const pointOffersList = (Array.isArray(offers) && offers.length)
-    ? getOffersListTemplate(pointOffers.join(''))
+  const pointPhotosList = (getPhotos(pictures) && pictures.length)
+    ? getPhotosList(pictures)
     : '';
 
-  const pointPhotosList = (Array.isArray(pictures) && pictures.length)
-    ? getPhotosListTemplate(photos.join(''))
+  const pointOffersList = (getOffers(offers) && offers.length)
+    ? getOffersList(offers)
     : '';
 
   const pointDestination = (name && description.length > 0)
-    ? getDestinationTemplate(pointDescription, pointPhotosList)
+    ? getDestination(pointDescription, pointPhotosList)
+    : '';
+
+  const isDetails = (point.offers && point.destination)
+    ? getDetails(pointOffersList, pointDestination)
     : '';
 
   return `<li class="trip-events__item">
@@ -188,10 +201,7 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
         <button class="event__reset-btn" type="reset">${editorModeButton}</button>
         ${isRollup}
       </header>
-      <section class="event__details">
-        ${pointOffersList}
-        ${pointDestination}
-      </section>
+        ${isDetails}
     </form>
   </li>`;
 };
