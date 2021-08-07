@@ -1,28 +1,41 @@
 import {getDayMonthFormatDate} from '../utils/utils.js';
 
-const TRIP_ROUTE_LENGTH = 3;
+const POINTS_TO_SHOW = 3;
+const PointsOnRoute = {
+  FIRST: 0,
+  SECOND: 1,
+};
 
-export const createMainMenuInfoTemplate = (points) => {
-  const tripRoute = `${points[0].destination.name} &mdash; ${points.length > TRIP_ROUTE_LENGTH ? '...' : points[1].destination.name} &mdash; ${points[points.length - 1].destination.name}`;
+const getTripRoute = (routePoints) => (
+  `${routePoints[PointsOnRoute.FIRST].destination.name} &mdash; ${(routePoints.length <= POINTS_TO_SHOW) ? routePoints[PointsOnRoute.SECOND].destination.name : '...'} &mdash; ${routePoints[routePoints.length - 1].destination.name}`
+);
 
-  const dateFromUnits = getDayMonthFormatDate(points[0].dateFrom).split(' ');
-  const dateToUnits = getDayMonthFormatDate(points[points.length - 1].dateFrom).split(' ');
+const getTripDuration = (routePoints) => {
+  const dateFromUnits = getDayMonthFormatDate(routePoints[PointsOnRoute.FIRST].dateFrom).split(' ');
+  const dateToUnits = getDayMonthFormatDate(routePoints[routePoints.length - 1].dateTo).split(' ');
 
-  const tripDuration = dateFromUnits[0] === dateToUnits[0]
-    ? `${dateFromUnits[0]} ${dateFromUnits[1]}&nbsp;&mdash;&nbsp;${dateToUnits[1]}`
-    : `${dateFromUnits[0]} ${dateFromUnits[1]}&nbsp;&mdash;&nbsp;${dateToUnits[0]} ${dateToUnits[1]}`;
+  const startingMonth = dateFromUnits[0];
+  const endingMonth = dateToUnits[0];
+  const sartingDate = dateFromUnits[1];
+  const endingDate = dateToUnits[1];
 
-  const getTotalTripPrice = points.reduce((acc, currentPoint) => acc + currentPoint.basePrice, 0);
+  return (startingMonth === endingMonth)
+    ? `${startingMonth} ${sartingDate}&nbsp;&mdash;&nbsp;${endingDate}`
+    : `${startingMonth} ${sartingDate}&nbsp;&mdash;&nbsp;${endingMonth} ${endingDate}`;
+};
 
-  return `<section class="trip-main__trip-info  trip-info">
+const getTotalTripPrice = (routePoints) => routePoints.reduce((acc, currentPoint) => acc + currentPoint.basePrice, 0);
+
+export const createMainMenuInfoTemplate = (points) => (
+  `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
-      <h1 class="trip-info__title">${tripRoute}</h1>
+      <h1 class="trip-info__title">${getTripRoute(points)}</h1>
 
-      <p class="trip-info__dates">${tripDuration}</p>
+      <p class="trip-info__dates">${getTripDuration(points)}</p>
     </div>
 
     <p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalTripPrice}</span>
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalTripPrice(points)}</span>
     </p>
-  </section>`;
-};
+  </section>`
+);
