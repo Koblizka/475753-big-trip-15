@@ -7,6 +7,11 @@ import { createEventPointEditorTemplate } from './view/event-point-editor';
 import { createEventsListItemTemplate } from './view/events-list-item';
 import { sortedPoints } from './mock/point.js';
 
+const PointEditorModeButtons = {
+  EDIT: 'Delete',
+  CREATE: 'Cancel',
+};
+
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
 const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls__filters');
@@ -24,6 +29,6 @@ render(allEventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventsListElement = allEventsElement.querySelector('.trip-events__list');
 
-render(eventsListElement, createEventPointEditorTemplate('none', sortedPoints[0]), 'beforeend');
+render(eventsListElement, createEventPointEditorTemplate(PointEditorModeButtons.CREATE, sortedPoints[0]), 'beforeend');
 
 sortedPoints.forEach((point) => render(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));

@@ -11,7 +11,54 @@ const getOfferName = (offerTitle) => {
     tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
 };
 
-export const createEventPointEditorTemplate = (isEditMode, point) => {
+const getRollupButton = () => (
+  `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+  </button>`
+);
+
+const getOfferTemplate = (offer) => (
+  `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferName(offer.title)}-1"
+    type="checkbox" name="event-offer-${getOfferName(offer.title)}">
+    <label class="event__offer-label" for="event-offer-${getOfferName(offer.title)}-1">
+      <span class="event__offer-title">${offer.title}</span>
+      +€&nbsp;
+      <span class="event__offer-price">${offer.price}</span>
+    </label>
+  </div>`
+);
+
+const getOffersListTemplate = (offers) => (
+  `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+    ${offers}
+    </div>
+  </section>`
+);
+
+const getPhotoTemplate = (photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`;
+
+const getPhotosListTemplate = (photos) => (
+  `<div class="event__photos-container">
+    <div class="event__photos-tape">
+      ${photos}
+    </div>
+  </div>`
+);
+
+const getDescriptionTemplate = (description) => `<p class="event__destination-description">${description}</p>`;
+
+const getDestinationTemplate = (description, photos) => (
+  `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    ${description}
+    ${photos}
+  </section>`
+);
+
+export const createEventPointEditorTemplate = (editorModeButton, point) => {
   const {
     offers,
   } = point.offers;
@@ -22,49 +69,24 @@ export const createEventPointEditorTemplate = (isEditMode, point) => {
     pictures,
   } = point.destination;
 
-  const isEditor = (isEditMode === 'editMode')
-    ? `<button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
-        <span class="visually-hidden">Open event</span>
-    </button>`
-    : '<button class="event__reset-btn" type="reset">Cancel</button>';
+  const pointOffers = offers.map((offer) => getOfferTemplate(offer));
+  const photos = pictures.map((picture) => getPhotoTemplate(picture));
+  const pointDescription = getDescriptionTemplate(description);
 
-
-  const pointOffers = offers.map((offer) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferName(offer.title)}-1"
-    type="checkbox" name="event-offer-${getOfferName(offer.title)}">
-    <label class="event__offer-label" for="event-offer-${getOfferName(offer.title)}-1">
-      <span class="event__offer-title">${offer.title}</span>
-      +€&nbsp;
-      <span class="event__offer-price">${offer.price}</span>
-    </label>
-  </div>`);
-
-  const isOffers = (Array.isArray(offers) && offers.length)
-    ? `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-    ${pointOffers.join('')}
-    </div>
-  </section>`
+  const isRollup = (editorModeButton === 'Delete')
+    ? getRollupButton()
     : '';
 
-  const photo = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
-
-  const isPhotos = (Array.isArray(pictures) && pictures.length)
-    ? `<div class="event__photos-container">
-    <div class="event__photos-tape">
-      ${photo.join('')}
-    </div>
-  </div>`
+  const pointOffersList = (Array.isArray(offers) && offers.length)
+    ? getOffersListTemplate(pointOffers.join(''))
     : '';
 
-  const isDestination = (Array.isArray(pictures) && pictures.length)
-    ? `<section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${description}</p>
-    ${isPhotos}
-  </section>`
+  const pointPhotosList = (Array.isArray(pictures) && pictures.length)
+    ? getPhotosListTemplate(photos.join(''))
+    : '';
+
+  const pointDestination = (name && description.length > 0)
+    ? getDestinationTemplate(pointDescription, pointPhotosList)
     : '';
 
   return `<li class="trip-events__item">
@@ -163,11 +185,12 @@ export const createEventPointEditorTemplate = (isEditMode, point) => {
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        ${isEditor}
+        <button class="event__reset-btn" type="reset">${editorModeButton}</button>
+        ${isRollup}
       </header>
       <section class="event__details">
-        ${isOffers}
-        ${isDestination}
+        ${pointOffersList}
+        ${pointDestination}
       </section>
     </form>
   </li>`;
