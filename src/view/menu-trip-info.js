@@ -1,4 +1,4 @@
-import {getDayMonthFormatDate} from '../utils/utils.js';
+import {getDayMonthFormatDate} from '../utils/date.js';
 
 const POINTS_TO_SHOW = 3;
 const PointsOnRoute = {

@@ -3,7 +3,7 @@ import {
   getTime,
   getDateDifference,
   getDuration
-} from '../utils/utils.js';
+} from '../utils/date.js';
 
 const getOffer = (offer) => (
   `<li class="event__offer">

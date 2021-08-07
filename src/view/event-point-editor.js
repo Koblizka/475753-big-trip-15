@@ -1,4 +1,4 @@
-import {getFormatedDate} from '../utils/utils.js';
+import {getFormatedDate} from '../utils/date.js';
 
 const OFFER_NAME_LENGTH = 2;
 const OFFER_NAME_WORD_LENGTH = 1;

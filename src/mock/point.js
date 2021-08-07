@@ -9,9 +9,11 @@ import {
 } from './data.js';
 import {
   getRandomInteger,
+} from '../utils/utils.js';
+import {
   getDate,
   sortByDate
-} from '../utils/utils.js';
+} from '../utils/date.js';
 import {customAlphabet} from 'nanoid';
 
 const nanoid = customAlphabet('1234567890', 5);
