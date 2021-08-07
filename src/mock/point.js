@@ -8,7 +8,7 @@ import {
   BasePrice
 } from './data.js';
 import {
-  getRandomInteger,
+  getRandomInteger
 } from '../utils/utils.js';
 import {
   getDate,
