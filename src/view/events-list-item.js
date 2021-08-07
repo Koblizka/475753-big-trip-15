@@ -5,20 +5,28 @@ import {
   getDuration
 } from '../utils/utils.js';
 
+const getOffer = (offer) => (
+  `<li class="event__offer">
+    <span class="event__offer-title">${offer.title}</span>
+    +€&nbsp;
+    <span class="event__offer-price">${offer.price}</span>
+  </li>`
+);
+
+const getOffers = (offers) => offers.map((offer) => getOffer(offer)).join('');
+
+const getOffersList = (offers) => (
+  `<h4 class="visually-hidden">Offers:</h4>
+  <ul class="event__selected-offers">${getOffers(offers)}</ul>`
+);
+
 export const createEventsListItemTemplate = (point) => {
   const {
     offers,
   } = point.offers;
 
-  const pointOffers = offers.map((offer) => `<li class="event__offer">
-    <span class="event__offer-title">${offer.title}</span>
-    +€&nbsp;
-    <span class="event__offer-price">${offer.price}</span>
-  </li>`);
-
-  const isOffers = (Array.isArray(offers) && offers.length)
-    ? `<h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">${pointOffers.join('')}</ul>`
+  const isOffers = (getOffers(offers) && offers.length)
+    ? getOffersList(offers)
     : '';
 
   const dateDiference = getDateDifference(point.dateFrom, point.dateTo);
