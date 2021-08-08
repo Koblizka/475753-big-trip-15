@@ -1,5 +1,108 @@
-export const createEventPointEditorTemplate = (isEditMode) => (
-  `<li class="trip-events__item">
+import {getFormatedDate} from '../utils/date.js';
+
+const OFFER_NAME_LENGTH = 2;
+const OFFER_NAME_WORD_LENGTH = 1;
+
+const getOfferName = (offerTitle) => {
+  const tempName = offerTitle.split(' ');
+
+  return (tempName.length <= OFFER_NAME_LENGTH) ?
+    tempName.pop() :
+    tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
+};
+
+const getRollupButton = () => (
+  `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+  </button>`
+);
+
+const getDetails = (offers, destination) => (
+  `<section class="event__details">
+    ${offers}
+    ${destination}
+  </section>`
+);
+
+const getOffer = (offer) => (
+  `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferName(offer.title)}-1"
+    type="checkbox" name="event-offer-${getOfferName(offer.title)}">
+    <label class="event__offer-label" for="event-offer-${getOfferName(offer.title)}-1">
+      <span class="event__offer-title">${offer.title}</span>
+      +€&nbsp;
+      <span class="event__offer-price">${offer.price}</span>
+    </label>
+  </div>`
+);
+
+const getOffers = (offers) => offers.map((offer) => getOffer(offer)).join('');
+
+const getOffersList = (offers) => (
+  `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+    ${getOffers(offers)}
+    </div>
+  </section>`
+);
+
+const getPhoto = (photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`;
+
+const getPhotos = (photos) => photos.map((photo) => getPhoto(photo)).join('');
+
+const getPhotosList = (photos) => (
+  `<div class="event__photos-container">
+    <div class="event__photos-tape">
+      ${getPhotos(photos)}
+    </div>
+  </div>`
+);
+
+const getDescription = (description) => `<p class="event__destination-description">${description}</p>`;
+
+const getDestination = (description, photos) => (
+  `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    ${description}
+    ${photos}
+  </section>`
+);
+
+export const createEventPointEditorTemplate = (editorModeButton, point) => {
+  const {
+    offers,
+  } = point.offers;
+
+  const {
+    name,
+    description,
+    pictures,
+  } = point.destination;
+
+  const pointDescription = getDescription(description);
+
+  const isRollup = (editorModeButton === 'Delete')
+    ? getRollupButton()
+    : '';
+
+  const pointPhotosList = (getPhotos(pictures) && pictures.length)
+    ? getPhotosList(pictures)
+    : '';
+
+  const pointOffersList = (getOffers(offers) && offers.length)
+    ? getOffersList(offers)
+    : '';
+
+  const pointDestination = (name && description.length > 0)
+    ? getDestination(pointDescription, pointPhotosList)
+    : '';
+
+  const isDetails = (point.offers && point.destination)
+    ? getDetails(pointOffersList, pointDestination)
+    : '';
+
+  return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -68,9 +171,9 @@ export const createEventPointEditorTemplate = (isEditMode) => (
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            Flight
+            ${point.type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -80,10 +183,10 @@ export const createEventPointEditorTemplate = (isEditMode) => (
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedDate(point.dateFrom)}">
           —
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatedDate(point.dateTo)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -91,84 +194,14 @@ export const createEventPointEditorTemplate = (isEditMode) => (
             <span class="visually-hidden">Price</span>
             €
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        ${isEditMode === 'editMode' ?
-    `<button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-      </button>` :
-    '<button class="event__reset-btn" type="reset">Cancel</button>'}
+        <button class="event__reset-btn" type="reset">${editorModeButton}</button>
+        ${isRollup}
       </header>
-      <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-          <div class="event__available-offers">
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-              <label class="event__offer-label" for="event-offer-luggage-1">
-                <span class="event__offer-title">Add luggage</span>
-                +€&nbsp;
-                <span class="event__offer-price">30</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-              <label class="event__offer-label" for="event-offer-comfort-1">
-                <span class="event__offer-title">Switch to comfort class</span>
-                +€&nbsp;
-                <span class="event__offer-price">100</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-              <label class="event__offer-label" for="event-offer-meal-1">
-                <span class="event__offer-title">Add meal</span>
-                +€&nbsp;
-                <span class="event__offer-price">15</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-              <label class="event__offer-label" for="event-offer-seats-1">
-                <span class="event__offer-title">Choose seats</span>
-                +€&nbsp;
-                <span class="event__offer-price">5</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-              <label class="event__offer-label" for="event-offer-train-1">
-                <span class="event__offer-title">Travel by train</span>
-                +€&nbsp;
-                <span class="event__offer-price">40</span>
-              </label>
-            </div>
-          </div>
-        </section>
-
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
-
-          <div class="event__photos-container">
-            <div class="event__photos-tape">
-              <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-              <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-              <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-              <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-              <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
-            </div>
-          </div>
-        </section>
-      </section>
+        ${isDetails}
     </form>
-  </li>`
-);
+  </li>`;
+};

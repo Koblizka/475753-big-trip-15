@@ -5,8 +5,12 @@ import { createEventsSortTemplate } from './view/events-sort';
 import { createEventsListTemplate } from './view/events-list';
 import { createEventPointEditorTemplate } from './view/event-point-editor';
 import { createEventsListItemTemplate } from './view/events-list-item';
+import { sortedPoints } from './mock/point.js';
 
-const WAY_POINT_AMOUNT = 3;
+const PointEditorModeButtons = {
+  EDIT: 'Delete',
+  CREATE: 'Cancel',
+};
 
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
@@ -17,7 +21,7 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(headerMainInfoElement, createMainMenuInfoTemplate(), 'afterbegin');
+render(headerMainInfoElement, createMainMenuInfoTemplate(sortedPoints), 'afterbegin');
 render(headerNavigationElement, createMainMenuNavigationTemplate(), 'beforeend');
 render(headerFiltersElement, createMainMenuFiltersTemplate(), 'beforeend');
 render(allEventsElement, createEventsSortTemplate(), 'beforeend');
@@ -25,8 +29,6 @@ render(allEventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventsListElement = allEventsElement.querySelector('.trip-events__list');
 
-render(eventsListElement, createEventPointEditorTemplate(), 'beforeend');
+render(eventsListElement, createEventPointEditorTemplate(PointEditorModeButtons.CREATE, sortedPoints[0]), 'beforeend');
 
-for (let i = 0; i < WAY_POINT_AMOUNT; i++) {
-  render(eventsListElement, createEventsListItemTemplate(), 'beforeend');
-}
+sortedPoints.forEach((point) => render(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));
