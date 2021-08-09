@@ -10,7 +10,7 @@ import {PointEditorModeButtons} from './view/event-point-editor.js';
 import { sortedPoints } from './mock/point.js';
 import {
   RenderPosition,
-  renderElement
+  render
 } from './utils/utils.js';
 
 const headerMainInfoElement = document.querySelector('.trip-main');
@@ -18,14 +18,14 @@ const headerNavigationElement = headerMainInfoElement.querySelector('.trip-contr
 const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls__filters');
 const allEventsElement = document.querySelector('.trip-events');
 
-renderElement(headerMainInfoElement, new MainMenuInfo(sortedPoints).getElement(), RenderPosition.AFTERBEGIN);
-renderElement(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
-renderElement(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
-renderElement(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
+render(headerMainInfoElement, new MainMenuInfo(sortedPoints).getElement(), RenderPosition.AFTERBEGIN);
+render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
+render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
+render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
 
 const eventsListElement = new EventsList().getElement();
 
-renderElement(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
-renderElement(eventsListElement, new EventPointEditor(PointEditorModeButtons.CREATE, sortedPoints[0]).getElement(), RenderPosition.BEFOREEND);
+render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
+render(eventsListElement, new EventPointEditor(PointEditorModeButtons.CREATE, sortedPoints[0]).getElement(), RenderPosition.BEFOREEND);
 
-sortedPoints.forEach((point) => renderElement(eventsListElement, new EventsListItem(point).getElement(), RenderPosition.BEFOREEND));
+sortedPoints.forEach((point) => render(eventsListElement, new EventsListItem(point).getElement(), RenderPosition.BEFOREEND));

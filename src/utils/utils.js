@@ -17,7 +17,7 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const renderElement = (container, element, place) => {
+const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -28,14 +28,9 @@ const renderElement = (container, element, place) => {
   }
 };
 
-// const renderTemplate = (container, template, place) => {
-//   container.insertAdjacentHTML(place, template);
-// };
-
 export {
   getRandomInteger,
   RenderPosition,
   createElement,
-  renderElement,
-  // renderTemplate
+  render
 };
