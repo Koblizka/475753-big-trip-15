@@ -28,14 +28,14 @@ const renderElement = (container, element, place) => {
   }
 };
 
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+// const renderTemplate = (container, template, place) => {
+//   container.insertAdjacentHTML(place, template);
+// };
 
 export {
   getRandomInteger,
   RenderPosition,
   createElement,
   renderElement,
-  renderTemplate
+  // renderTemplate
 };

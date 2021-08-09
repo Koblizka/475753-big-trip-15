@@ -1,7 +1,13 @@
 import {getFormatedDate} from '../utils/date.js';
+import {createElement} from '../utils/utils.js';
 
 const OFFER_NAME_LENGTH = 2;
 const OFFER_NAME_WORD_LENGTH = 1;
+
+const PointEditorModeButtons = {
+  EDIT: 'Delete',
+  CREATE: 'Cancel',
+};
 
 const getOfferName = (offerTitle) => {
   const tempName = offerTitle.split(' ');
@@ -69,7 +75,7 @@ const getDestination = (description, photos) => (
   </section>`
 );
 
-export const createEventPointEditorTemplate = (editorModeButton, point) => {
+const createEventPointEditorTemplate = (editorModeButton, point) => {
   const {
     offers,
   } = point.offers;
@@ -82,7 +88,7 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
 
   const pointDescription = getDescription(description);
 
-  const isRollup = (editorModeButton === 'Delete')
+  const isRollup = (editorModeButton === PointEditorModeButtons.EDIT)
     ? getRollupButton()
     : '';
 
@@ -201,3 +207,28 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
     </form>
   </li>`;
 };
+
+export {PointEditorModeButtons};
+export default class EventPointEditor {
+  constructor(editMode, points) {
+    this._element = null;
+    this._points = points;
+    this._editMode = editMode;
+  }
+
+  getTemplate() {
+    return createEventPointEditorTemplate(this._editMode, this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,5 @@
 import {getDayMonthFormatDate} from '../utils/date.js';
+import {createElement} from '../utils/utils.js';
 
 const POINTS_TO_SHOW = 3;
 const PointsOnRoute = {
@@ -26,7 +27,7 @@ const getTripDuration = (routePoints) => {
 
 const getTotalTripPrice = (routePoints) => routePoints.reduce((acc, currentPoint) => acc + currentPoint.basePrice, 0);
 
-export const createMainMenuInfoTemplate = (points) => (
+const createMainMenuInfoTemplate = (points) => (
   `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">${getTripRoute(points)}</h1>
@@ -39,3 +40,26 @@ export const createMainMenuInfoTemplate = (points) => (
     </p>
   </section>`
 );
+
+export default class MainMenuInfo {
+  constructor(points) {
+    this._element = null;
+    this._points = points;
+  }
+
+  getTemplate() {
+    return createMainMenuInfoTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
