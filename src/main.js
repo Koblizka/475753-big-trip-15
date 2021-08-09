@@ -55,18 +55,22 @@ const renderEvent = (listElement, point) => {
   return render(listElement, pointItemElement, RenderPosition.BEFOREEND);
 };
 
-render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
-render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
-
-if (sortedPoints.length === 0) {
-  render(allEventsElement, new EmptyEventsList().getElement(), RenderPosition.BEFOREEND);
-} else {
-  render(headerMainInfoElement, new MainMenuInfo(sortedPoints).getElement(), RenderPosition.AFTERBEGIN);
-  render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
-
+const renderEventsList = (points) => {
   const eventsListElement = new EventsList().getElement();
 
+  if (!points.length) {
+    render(allEventsElement, new EmptyEventsList().getElement(), RenderPosition.BEFOREEND);
+
+    return;
+  }
+
+  render(headerMainInfoElement, new MainMenuInfo(points).getElement(), RenderPosition.AFTERBEGIN);
+  render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
   render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
 
-  sortedPoints.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
-}
+  points.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
+};
+
+render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
+render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
+renderEventsList(sortedPoints);
