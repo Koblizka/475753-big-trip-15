@@ -18,6 +18,27 @@ const headerNavigationElement = headerMainInfoElement.querySelector('.trip-contr
 const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls__filters');
 const allEventsElement = document.querySelector('.trip-events');
 
+const renderEvent = (listElement, point) => {
+  const pointEditorElement = new EventPointEditor(PointEditorModeButtons.EDIT, point).getElement();
+  const pointItemElement = new EventsListItem(point).getElement();
+
+  const replaceToEditMode = () => {
+    listElement.replaceChild(pointEditorElement, pointItemElement);
+  };
+  const replaceToPoint = () => {
+    listElement .replaceChild(pointItemElement, pointEditorElement);
+  };
+
+  pointItemElement.querySelector('.event__rollup-btn').addEventListener('click', replaceToEditMode);
+  pointEditorElement.querySelector('.event__rollup-btn').addEventListener('click', replaceToPoint);
+  pointEditorElement.querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceToPoint();
+  });
+
+  return render(listElement, pointItemElement, RenderPosition.BEFOREEND);
+};
+
 render(headerMainInfoElement, new MainMenuInfo(sortedPoints).getElement(), RenderPosition.AFTERBEGIN);
 render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
 render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
@@ -26,6 +47,5 @@ render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND
 const eventsListElement = new EventsList().getElement();
 
 render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
-render(eventsListElement, new EventPointEditor(PointEditorModeButtons.CREATE, sortedPoints[0]).getElement(), RenderPosition.BEFOREEND);
 
-sortedPoints.forEach((point) => render(eventsListElement, new EventsListItem(point).getElement(), RenderPosition.BEFOREEND));
+sortedPoints.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
