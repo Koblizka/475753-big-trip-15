@@ -98,10 +98,6 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
     ? getDestination(pointDescription, pointPhotosList)
     : '';
 
-  const isDetails = (point.offers && point.destination)
-    ? getDetails(pointOffersList, pointDestination)
-    : '';
-
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -201,7 +197,7 @@ export const createEventPointEditorTemplate = (editorModeButton, point) => {
         <button class="event__reset-btn" type="reset">${editorModeButton}</button>
         ${isRollup}
       </header>
-        ${isDetails}
+        ${getDetails(pointOffersList, pointDestination)}
     </form>
   </li>`;
 };
