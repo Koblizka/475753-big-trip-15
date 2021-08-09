@@ -6,6 +6,12 @@ import { createEventsListTemplate } from './view/events-list';
 import { createEventPointEditorTemplate } from './view/event-point-editor';
 import { createEventsListItemTemplate } from './view/events-list-item';
 import { sortedPoints } from './mock/point.js';
+import {
+  RenderPosition,
+  createElement,
+  renderElement,
+  renderTemplate
+} from './utils/utils.js';
 
 const PointEditorModeButtons = {
   EDIT: 'Delete',
@@ -17,18 +23,14 @@ const headerNavigationElement = headerMainInfoElement.querySelector('.trip-contr
 const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls__filters');
 const allEventsElement = document.querySelector('.trip-events');
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-render(headerMainInfoElement, createMainMenuInfoTemplate(sortedPoints), 'afterbegin');
-render(headerNavigationElement, createMainMenuNavigationTemplate(), 'beforeend');
-render(headerFiltersElement, createMainMenuFiltersTemplate(), 'beforeend');
-render(allEventsElement, createEventsSortTemplate(), 'beforeend');
-render(allEventsElement, createEventsListTemplate(), 'beforeend');
+renderTemplate(headerMainInfoElement, createMainMenuInfoTemplate(sortedPoints), 'afterbegin');
+renderTemplate(headerNavigationElement, createMainMenuNavigationTemplate(), 'beforeend');
+renderTemplate(headerFiltersElement, createMainMenuFiltersTemplate(), 'beforeend');
+renderTemplate(allEventsElement, createEventsSortTemplate(), 'beforeend');
+renderTemplate(allEventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventsListElement = allEventsElement.querySelector('.trip-events__list');
 
-render(eventsListElement, createEventPointEditorTemplate(PointEditorModeButtons.CREATE, sortedPoints[0]), 'beforeend');
+renderTemplate(eventsListElement, createEventPointEditorTemplate(PointEditorModeButtons.CREATE, sortedPoints[0]), 'beforeend');
 
-sortedPoints.forEach((point) => render(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));
+sortedPoints.forEach((point) => renderTemplate(eventsListElement, createEventsListItemTemplate(point), 'beforeend'));
