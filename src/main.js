@@ -5,6 +5,7 @@ import EventsSort from './view/events-sort.js';
 import EventsList from './view/events-list.js';
 import EventPointEditor from './view/event-point-editor.js';
 import EventsListItem from './view/events-list-item.js';
+import EmptyEventsList from './view/events-list-empty.js';
 
 import {PointEditorModeButtons} from './view/event-point-editor.js';
 import { sortedPoints } from './mock/point.js';
@@ -25,12 +26,27 @@ const renderEvent = (listElement, point) => {
   const replaceToEditMode = () => {
     listElement.replaceChild(pointEditorElement, pointItemElement);
   };
+
   const replaceToPoint = () => {
     listElement .replaceChild(pointItemElement, pointEditorElement);
   };
 
-  pointItemElement.querySelector('.event__rollup-btn').addEventListener('click', replaceToEditMode);
-  pointEditorElement.querySelector('.event__rollup-btn').addEventListener('click', replaceToPoint);
+  const onEscapeButtonDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceToPoint();
+      document.removeEventListener('keydown', onEscapeButtonDown);
+    }
+  };
+
+  pointItemElement.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceToEditMode();
+    document.addEventListener('keydown', onEscapeButtonDown);
+  });
+  pointEditorElement.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceToPoint();
+    document.removeEventListener('keydown', onEscapeButtonDown);
+  });
   pointEditorElement.querySelector('form').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceToPoint();
@@ -39,13 +55,22 @@ const renderEvent = (listElement, point) => {
   return render(listElement, pointItemElement, RenderPosition.BEFOREEND);
 };
 
-render(headerMainInfoElement, new MainMenuInfo(sortedPoints).getElement(), RenderPosition.AFTERBEGIN);
+const renderEventsList = (points) => {
+  const eventsListElement = new EventsList().getElement();
+
+  if (!points.length) {
+    render(allEventsElement, new EmptyEventsList().getElement(), RenderPosition.BEFOREEND);
+
+    return;
+  }
+
+  render(headerMainInfoElement, new MainMenuInfo(points).getElement(), RenderPosition.AFTERBEGIN);
+  render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
+  render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
+
+  points.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
+};
+
 render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
 render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
-render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
-
-const eventsListElement = new EventsList().getElement();
-
-render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
-
-sortedPoints.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
+renderEventsList(sortedPoints);
