@@ -4,6 +4,7 @@ import {
   getDateDifference,
   getDuration
 } from '../utils/date.js';
+import {createElement} from '../utils/utils.js';
 
 const getOffer = (offer) => (
   `<li class="event__offer">
@@ -20,7 +21,7 @@ const getOffersList = (offers) => (
   <ul class="event__selected-offers">${getOffers(offers)}</ul>`
 );
 
-export const createEventsListItemTemplate = (point) => {
+const createEventsListItemTemplate = (point) => {
   const {
     offers,
   } = point.offers;
@@ -63,3 +64,27 @@ export const createEventsListItemTemplate = (point) => {
     </div>
   </li>`;
 };
+
+export default class EventsListItem {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return createEventsListItemTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
