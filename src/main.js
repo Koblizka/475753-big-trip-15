@@ -21,8 +21,8 @@ const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls
 const allEventsElement = document.querySelector('.trip-events');
 
 const renderEvent = (listElement, point) => {
-  const pointEditorElement = new EventPointEditor(PointEditorModeButtons.EDIT, point).getElement();
-  const pointItemElement = new EventsListItem(point).getElement();
+  const pointEditorElement = new EventPointEditor(PointEditorModeButtons.EDIT, point);
+  const pointItemElement = new EventsListItem(point);
 
   const replaceToEditMode = () => {
     replace(pointEditorElement, pointItemElement);
@@ -40,17 +40,17 @@ const renderEvent = (listElement, point) => {
     }
   };
 
-  pointItemElement.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointItemElement.setClickHandler(() => {
     replaceToEditMode();
     document.addEventListener('keydown', onEscapeButtonDown);
   });
-  pointEditorElement.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointEditorElement.setClickHandler(() => {
     replaceToPoint();
     document.removeEventListener('keydown', onEscapeButtonDown);
   });
-  pointEditorElement.querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditorElement.setFormSubmitHandler(() => {
     replaceToPoint();
+    document.removeEventListener('keydown', onEscapeButtonDown);
   });
 
   return render(listElement, pointItemElement, RenderPosition.BEFOREEND);
