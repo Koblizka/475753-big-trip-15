@@ -4,7 +4,7 @@ import {
   getDateDifference,
   getDuration
 } from '../utils/date.js';
-import {createElement} from '../utils/utils.js';
+import Abstract from '../view/abstract.js';
 
 const getOffer = (offer) => (
   `<li class="event__offer">
@@ -65,26 +65,14 @@ const createEventsListItemTemplate = (point) => {
   </li>`;
 };
 
-export default class EventsListItem {
+export default class EventsListItem extends Abstract{
   constructor(point) {
-    this._element = null;
+    super();
     this._point = point;
   }
 
   getTemplate() {
     return createEventsListItemTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

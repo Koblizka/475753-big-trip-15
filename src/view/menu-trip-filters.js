@@ -1,4 +1,4 @@
-import {createElement} from '../utils/utils.js';
+import Abstract from '../view/abstract.js';
 
 const createMainMenuFiltersTemplate = () => (
   `<form class="trip-filters" action="#" method="get">
@@ -21,24 +21,8 @@ const createMainMenuFiltersTemplate = () => (
   </form>`
 );
 
-export default class MainMenuFilters {
-  constructor() {
-    this._element = null;
-  }
-
+export default class MainMenuFilters extends Abstract{
   getTemplate() {
     return createMainMenuFiltersTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

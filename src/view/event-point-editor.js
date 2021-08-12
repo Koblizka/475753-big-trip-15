@@ -1,5 +1,5 @@
 import {getFormatedDate} from '../utils/date.js';
-import {createElement} from '../utils/utils.js';
+import Abstract from '../view/abstract.js';
 
 const OFFER_NAME_LENGTH = 2;
 const OFFER_NAME_WORD_LENGTH = 1;
@@ -209,26 +209,15 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
 };
 
 export {PointEditorModeButtons};
-export default class EventPointEditor {
+export default class EventPointEditor extends Abstract{
   constructor(editMode, points) {
-    this._element = null;
+    super();
+
     this._points = points;
     this._editMode = editMode;
   }
 
   getTemplate() {
     return createEventPointEditorTemplate(this._editMode, this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
