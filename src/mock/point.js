@@ -9,7 +9,7 @@ import {
 } from './data.js';
 import {
   getRandomInteger
-} from '../utils/utils.js';
+} from '../utils/common.js';
 import {
   getDate,
   sortByDate

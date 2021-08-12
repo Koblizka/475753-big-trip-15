@@ -11,8 +11,9 @@ import {PointEditorModeButtons} from './view/event-point-editor.js';
 import { sortedPoints } from './mock/point.js';
 import {
   RenderPosition,
-  render
-} from './utils/utils.js';
+  render,
+  replace
+} from './utils/render.js';
 
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
@@ -24,11 +25,11 @@ const renderEvent = (listElement, point) => {
   const pointItemElement = new EventsListItem(point).getElement();
 
   const replaceToEditMode = () => {
-    listElement.replaceChild(pointEditorElement, pointItemElement);
+    replace(pointEditorElement, pointItemElement);
   };
 
   const replaceToPoint = () => {
-    listElement .replaceChild(pointItemElement, pointEditorElement);
+    replace(pointItemElement, pointEditorElement);
   };
 
   const onEscapeButtonDown = (evt) => {
@@ -64,13 +65,13 @@ const renderEventsList = (points) => {
     return;
   }
 
-  render(headerMainInfoElement, new MainMenuInfo(points).getElement(), RenderPosition.AFTERBEGIN);
-  render(allEventsElement, new EventsSort().getElement(), RenderPosition.BEFOREEND);
+  render(headerMainInfoElement, new MainMenuInfo(points), RenderPosition.AFTERBEGIN);
+  render(allEventsElement, new EventsSort(), RenderPosition.BEFOREEND);
   render(allEventsElement, eventsListElement, RenderPosition.BEFOREEND);
 
   points.forEach((point) => renderEvent(eventsListElement, point), RenderPosition.BEFOREEND);
 };
 
-render(headerNavigationElement, new MainMenuNavigation().getElement(), RenderPosition.BEFOREEND);
-render(headerFiltersElement, new MainMenuFilters().getElement(), RenderPosition.BEFOREEND);
+render(headerNavigationElement, new MainMenuNavigation(), RenderPosition.BEFOREEND);
+render(headerFiltersElement, new MainMenuFilters(), RenderPosition.BEFOREEND);
 renderEventsList(sortedPoints);
