@@ -1,5 +1,5 @@
 import {getDayMonthFormatDate} from '../utils/date.js';
-import {createElement} from '../utils/utils.js';
+import Abstract from '../view/abstract.js';
 
 const POINTS_TO_SHOW = 3;
 const PointsOnRoute = {
@@ -41,25 +41,13 @@ const createMainMenuInfoTemplate = (points) => (
   </section>`
 );
 
-export default class MainMenuInfo {
+export default class MainMenuInfo extends Abstract{
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
   }
 
   getTemplate() {
     return createMainMenuInfoTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

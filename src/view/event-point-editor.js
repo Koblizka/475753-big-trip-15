@@ -1,5 +1,5 @@
 import {getFormatedDate} from '../utils/date.js';
-import {createElement} from '../utils/utils.js';
+import Abstract from '../view/abstract.js';
 
 const OFFER_NAME_LENGTH = 2;
 const OFFER_NAME_WORD_LENGTH = 1;
@@ -110,7 +110,7 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${String(point.type).toLowerCase()}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -209,26 +209,37 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
 };
 
 export {PointEditorModeButtons};
-export default class EventPointEditor {
+export default class EventPointEditor extends Abstract{
   constructor(editMode, points) {
-    this._element = null;
+    super();
+
     this._points = points;
     this._editMode = editMode;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return createEventPointEditorTemplate(this._editMode, this._points);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._clickHandler);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 }
