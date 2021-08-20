@@ -210,32 +210,32 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
 
 export {PointEditorModeButtons};
 export default class EventPointEditor extends Abstract{
-  constructor(editMode, points) {
+  constructor(editMode, point) {
     super();
 
-    this._points = points;
+    this._point = point;
     this._editMode = editMode;
-    this._clickHandler = this._clickHandler.bind(this);
+    this._clickRollupHandler = this._clickRollupHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
-    return createEventPointEditorTemplate(this._editMode, this._points);
+    return createEventPointEditorTemplate(this._editMode, this._point);
   }
 
-  _clickHandler(evt) {
+  _clickRollupHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.rollupClick();
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
-  setClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._clickHandler);
+  setClickRollupHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._clickRollupHandler);
   }
 
   setFormSubmitHandler(callback) {
