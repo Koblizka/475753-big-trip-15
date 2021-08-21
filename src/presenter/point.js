@@ -23,11 +23,11 @@ export default class EventPoint {
     this._pointItemElement = null;
     this._mode = Mode.DEFAULT;
 
-    this._handlerEscapeButtonDown = this._handlerEscapeButtonDown.bind(this);
-    this._handlerPointToFormChange = this._handlerPointToFormChange.bind(this);
-    this._handlerFormToPointChange = this._handlerFormToPointChange.bind(this);
-    this._handlerFavoriteClick = this._handlerFavoriteClick.bind(this);
-    this._handlerSubmitForm = this._handlerSubmitForm.bind(this);
+    this._handleEscapeButtonDown = this._handleEscapeButtonDown.bind(this);
+    this._handlePointToFormChange = this._handlePointToFormChange.bind(this);
+    this._handleFormToPointChange = this._handleFormToPointChange.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleSubmitForm = this._handleSubmitForm.bind(this);
   }
 
   init(point) {
@@ -39,10 +39,10 @@ export default class EventPoint {
     this._pointEditorElement = new EventPointEditor(PointEditorModeButtons.EDIT, this._point);
     this._pointItemElement = new EventsListItem(this._point);
 
-    this._pointItemElement.setClickRollupHandler(this._handlerPointToFormChange);
-    this._pointEditorElement.setClickRollupHandler(this._handlerFormToPointChange);
-    this._pointEditorElement.setFormSubmitHandler(this._handlerSubmitForm);
-    this._pointItemElement.setFavoriteClickHandler(this._handlerFavoriteClick);
+    this._pointItemElement.setClickRollupHandler(this._handlePointToFormChange);
+    this._pointEditorElement.setClickRollupHandler(this._handleFormToPointChange);
+    this._pointEditorElement.setFormSubmitHandler(this._handleSubmitForm);
+    this._pointItemElement.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevPointEditorElement === null || prevPointItemElement === null) {
       render(this._pointContainer, this._pointItemElement, RenderPosition.BEFOREEND);
@@ -73,7 +73,7 @@ export default class EventPoint {
     }
   }
 
-  _handlerFavoriteClick() {
+  _handleFavoriteClick() {
     this._changeData(
       Object.assign(
         {},
@@ -85,30 +85,30 @@ export default class EventPoint {
     );
   }
 
-  _handlerEscapeButtonDown(evt) {
+  _handleEscapeButtonDown(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._replaceToPoint();
-      document.removeEventListener('keydown', this._handlerEscapeButtonDown);
+      document.removeEventListener('keydown', this._handleEscapeButtonDown);
     }
   }
 
-  _handlerPointToFormChange() {
+  _handlePointToFormChange() {
     this._replaceToEditMode();
   }
 
-  _handlerFormToPointChange() {
+  _handleFormToPointChange() {
     this._replaceToPoint();
   }
 
-  _handlerSubmitForm() {
+  _handleSubmitForm() {
     this._changeData(this._point);
     this._replaceToPoint();
   }
 
   _replaceToEditMode() {
     replace(this._pointEditorElement, this._pointItemElement);
-    document.addEventListener('keydown', this._handlerEscapeButtonDown);
+    document.addEventListener('keydown', this._handleEscapeButtonDown);
 
     this._changeMode();
     this._mode = Mode.EDIT;
@@ -116,7 +116,7 @@ export default class EventPoint {
 
   _replaceToPoint() {
     replace(this._pointItemElement, this._pointEditorElement);
-    document.removeEventListener('keydown', this._handlerEscapeButtonDown);
+    document.removeEventListener('keydown', this._handleEscapeButtonDown);
     this._mode = Mode.DEFAULT;
   }
 }
