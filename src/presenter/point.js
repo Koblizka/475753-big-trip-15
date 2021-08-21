@@ -26,7 +26,7 @@ export default class EventPoint {
     this._handlerEscapeButtonDown = this._handlerEscapeButtonDown.bind(this);
     this._handlerReplaceToEditMode = this._handlerReplaceToEditMode.bind(this);
     this._handlerReplaceToPoint = this._handlerReplaceToPoint.bind(this);
-    this._handlerFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handlerFavoriteClick = this._handlerFavoriteClick.bind(this);
     this._handlerSubmitForm = this._handlerSubmitForm.bind(this);
   }
 
@@ -42,7 +42,7 @@ export default class EventPoint {
     this._pointItemElement.setClickRollupHandler(this._handlerReplaceToEditMode);
     this._pointEditorElement.setClickRollupHandler(this._handlerReplaceToPoint);
     this._pointEditorElement.setFormSubmitHandler(this._handlerSubmitForm);
-    this._pointItemElement.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._pointItemElement.setFavoriteClickHandler(this._handlerFavoriteClick);
 
     if (prevPointEditorElement === null || prevPointItemElement === null) {
       render(this._pointContainer, this._pointItemElement, RenderPosition.BEFOREEND);
@@ -73,7 +73,7 @@ export default class EventPoint {
     }
   }
 
-  _handleFavoriteClick() {
+  _handlerFavoriteClick() {
     this._changeData(
       Object.assign(
         {},
