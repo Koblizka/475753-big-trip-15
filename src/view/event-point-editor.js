@@ -17,18 +17,15 @@ const getOfferName = (offerTitle) => {
     tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
 };
 
-const getRollupButton = () => (
-  `<button class="event__rollup-btn" type="button">
-      <span class="visually-hidden">Open event</span>
-  </button>`
-);
-
-const getDetails = (offers, destination) => (
-  `<section class="event__details">
-    ${offers}
-    ${destination}
-  </section>`
-);
+const getRollupButton = (buttonMode) => {
+  if (buttonMode === PointEditorModeButtons.EDIT) {
+    return (
+      `<button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+      </button>`
+    );
+  }
+};
 
 const getOffer = (offer) => (
   `<div class="event__offer-selector">
@@ -70,8 +67,15 @@ const getDescription = (description) => `<p class="event__destination-descriptio
 const getDestination = (description, photos) => (
   `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    ${description}
-    ${photos}
+    ${getDescription(description)}
+    ${getPhotosList(photos)}
+  </section>`
+);
+
+const getDetails = (offers, {description, pictures}) => (
+  `<section class="event__details">
+    ${getOffers(offers) ? getOffersList(offers) : ''}
+    ${description ? getDestination(description, pictures) : ''}
   </section>`
 );
 
@@ -79,30 +83,6 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
   const {
     offers,
   } = point.offers;
-
-  const {
-    name,
-    description,
-    pictures,
-  } = point.destination;
-
-  const pointDescription = getDescription(description);
-
-  const isRollup = (editorModeButton === PointEditorModeButtons.EDIT)
-    ? getRollupButton()
-    : '';
-
-  const pointPhotosList = (getPhotos(pictures) && pictures.length)
-    ? getPhotosList(pictures)
-    : '';
-
-  const pointOffersList = (getOffers(offers) && offers.length)
-    ? getOffersList(offers)
-    : '';
-
-  const pointDestination = (name && description.length > 0)
-    ? getDestination(pointDescription, pointPhotosList)
-    : '';
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -175,7 +155,7 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${point.type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.destination.name}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -201,9 +181,9 @@ const createEventPointEditorTemplate = (editorModeButton, point) => {
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">${editorModeButton}</button>
-        ${isRollup}
+        ${getRollupButton(editorModeButton)}
       </header>
-        ${getDetails(pointOffersList, pointDestination)}
+        ${getDetails(offers, point.destination)}
     </form>
   </li>`;
 };
