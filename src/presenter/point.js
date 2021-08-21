@@ -24,8 +24,8 @@ export default class EventPoint {
     this._mode = Mode.DEFAULT;
 
     this._handlerEscapeButtonDown = this._handlerEscapeButtonDown.bind(this);
-    this._handlerReplaceToEditMode = this._handlerReplaceToEditMode.bind(this);
-    this._handlerReplaceToPoint = this._handlerReplaceToPoint.bind(this);
+    this._handlerPointToFormChange = this._handlerPointToFormChange.bind(this);
+    this._handlerFormToPointChange = this._handlerFormToPointChange.bind(this);
     this._handlerFavoriteClick = this._handlerFavoriteClick.bind(this);
     this._handlerSubmitForm = this._handlerSubmitForm.bind(this);
   }
@@ -39,8 +39,8 @@ export default class EventPoint {
     this._pointEditorElement = new EventPointEditor(PointEditorModeButtons.EDIT, this._point);
     this._pointItemElement = new EventsListItem(this._point);
 
-    this._pointItemElement.setClickRollupHandler(this._handlerReplaceToEditMode);
-    this._pointEditorElement.setClickRollupHandler(this._handlerReplaceToPoint);
+    this._pointItemElement.setClickRollupHandler(this._handlerPointToFormChange);
+    this._pointEditorElement.setClickRollupHandler(this._handlerFormToPointChange);
     this._pointEditorElement.setFormSubmitHandler(this._handlerSubmitForm);
     this._pointItemElement.setFavoriteClickHandler(this._handlerFavoriteClick);
 
@@ -93,11 +93,11 @@ export default class EventPoint {
     }
   }
 
-  _handlerReplaceToEditMode() {
+  _handlerPointToFormChange() {
     this._replaceToEditMode();
   }
 
-  _handlerReplaceToPoint() {
+  _handlerFormToPointChange() {
     this._replaceToPoint();
   }
 
