@@ -1,25 +1,19 @@
-import MainMenuInfo from '../view/menu-trip-info.js';
-import MainMenuNavigation from '../view/menu-trip-navigation.js';
-import MainMenuFilters from '../view/menu-trip-filters.js';
 import EventsSort from '../view/events-sort.js';
 import EventsList from '../view/events-list.js';
 import EmptyEventsList from '../view/events-list-empty.js';
-import EventPoint from './point.js';
 import {
   RenderPosition,
   render
 } from '../utils/render.js';
 import { updateItem } from '../utils/common.js';
-
+import EventPoint from './point.js';
+import MenuInfo from './info.js';
 
 export default class TripRoute {
-  constructor(headerContainer, eventsContainer) {
-    this._headerContainer = headerContainer;
+  constructor(eventsContainer) {
     this._eventsContainer = eventsContainer;
-    this._pointPresenter = new Map();
 
-    this._mainMenuNavigation = new MainMenuNavigation();
-    this._mainMenuFilters = new MainMenuFilters();
+    this._pointPresenter = new Map();
     this._eventsList = new EventsList();
     this._emptyEventsList = new EmptyEventsList();
     this._eventsSort = new EventsSort();
@@ -30,28 +24,7 @@ export default class TripRoute {
 
   init(points) {
     this._points = points;
-
-    this._renderMainMenuNavigation();
-    this._renderMainMenuFilters();
     this._renderEvents();
-  }
-
-  _renderMainMenuNavigation() {
-    this._navigationContainer = this._headerContainer.querySelector('.trip-controls__navigation');
-
-    render(this._navigationContainer, this._mainMenuNavigation, RenderPosition.BEFOREEND);
-  }
-
-  _renderMainMenuFilters() {
-    this._filtersContainer = this._headerContainer.querySelector('.trip-controls__filters');
-
-    render(this._filtersContainer, this._mainMenuFilters, RenderPosition.BEFOREEND);
-  }
-
-  _renderMenuInfo() {
-    this._mainMenuInfo = new MainMenuInfo(this._points);
-
-    render(this._headerContainer, this._mainMenuInfo, RenderPosition.AFTERBEGIN);
   }
 
   _renderEventPoint(point) {
@@ -88,6 +61,12 @@ export default class TripRoute {
 
   _renderEventsList() {
     render(this._eventsContainer, this._eventsList, RenderPosition.BEFOREEND);
+  }
+
+
+  _renderMenuInfo() {
+    this._menuInfo = new MenuInfo();
+    this._menuInfo.init(this._points);
   }
 
   _renderEvents() {
