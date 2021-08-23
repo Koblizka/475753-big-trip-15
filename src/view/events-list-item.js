@@ -1,7 +1,8 @@
 import {
   getDayMonthFormatDate,
   getTime,
-  getDateDifference,
+  getDateDifferenceInMinutes,
+  getIsoDate,
   getDuration
 } from '../utils/date.js';
 import Abstract from '../view/abstract.js';
@@ -30,7 +31,7 @@ const createEventsListItemTemplate = (point) => {
     ? getOffersList(offers)
     : '';
 
-  const dateDiference = getDateDifference(point.dateFrom, point.dateTo);
+  const dateDiference = getDateDifferenceInMinutes(point.dateFrom, point.dateTo);
   const duration = getDuration(dateDiference).join(' ');
 
   return `<li class="trip-events__item">
@@ -42,9 +43,9 @@ const createEventsListItemTemplate = (point) => {
       <h3 class="event__title">${point.type} ${point.destination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${point.dateFrom}">${getTime(point.dateFrom)}</time>
+          <time class="event__start-time" datetime="${getIsoDate(point.dateFrom)}">${getTime(point.dateFrom)}</time>
           —
-          <time class="event__end-time" datetime="${point.dateTo}">${getTime(point.dateTo)}</time>
+          <time class="event__end-time" datetime="${getIsoDate(point.dateTo)}">${getTime(point.dateTo)}</time>
         </p>
         <p class="event__duration">${duration}</p>
       </div>
