@@ -5,6 +5,12 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
+const SortType = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;
@@ -60,6 +66,7 @@ const remove = (component) => {
 
 export {
   RenderPosition,
+  SortType,
   createElement,
   render,
   replace,
