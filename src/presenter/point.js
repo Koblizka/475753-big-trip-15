@@ -88,6 +88,7 @@ export default class EventPoint {
   _handleEscapeButtonDown(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._pointEditorElement.reset(this._point);
       this._replaceToPoint();
       document.removeEventListener('keydown', this._handleEscapeButtonDown);
     }

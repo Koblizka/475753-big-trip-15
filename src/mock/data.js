@@ -13,12 +13,6 @@ const TYPES = [
   'Restaurant',
 ];
 
-// const DESTINATION_CITIES = [
-//   'Chamonix',
-//   'Amsterdam',
-//   'Geneva',
-// ];
-
 const OFFERS = [
   {
     type: 'taxi',
@@ -192,6 +186,10 @@ const OFFERS = [
     type: 'sightseeing',
     offers: [],
   },
+  {
+    type: 'transport',
+    offers: [],
+  },
 ];
 
 const DESCRIPTIONS = [
@@ -313,7 +311,6 @@ const BasePrice = {
 export {
   WAY_POINT_AMOUNT,
   TYPES,
-  // DESTINATION_CITIES,
   DESCRIPTIONS,
   OFFERS,
   DAY_GAP,
