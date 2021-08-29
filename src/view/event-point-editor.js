@@ -1,6 +1,8 @@
 import { getFormatedDate } from '../utils/date.js';
-import { OFFERS } from '../mock/data.js';
-import { sortedPoints } from '../mock/point.js';
+import {
+  OFFERS,
+  TYPES,
+  DESTINATIONS } from '../mock/data.js';
 import SmartView from './smart.js';
 
 const OFFER_NAME_LENGTH = 2;
@@ -11,18 +13,47 @@ const PointEditorModeButtons = {
   CREATE: 'Cancel',
 };
 
-const destinationCitiesNames= new Set();
-sortedPoints.forEach((point) => destinationCitiesNames.add(`<option value="${point.destination.name}"></option>`));
-
 const getOfferName = (offerTitle) => {
   const tempName = offerTitle.split(' ');
 
-  return (tempName.length <= OFFER_NAME_LENGTH) ?
-    tempName.pop() :
-    tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
+  return (tempName.length <= OFFER_NAME_LENGTH)
+    ? tempName.pop()
+    : tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
 };
 
-const getDestinationList = () => Array.from(destinationCitiesNames).join('');
+const getNewDestinationFieldValue = (lookingValue, lookingField) => {
+  const destinationField = DESTINATIONS.find((element) => element.name === lookingValue);
+
+  return (destinationField[lookingField]
+      && destinationField[lookingField].length)
+    ? destinationField[lookingField]
+    : null;
+};
+
+const getNewOffers = (lookingValue) => {
+  const typeOffers = OFFERS.find((element) => element.type === lookingValue);
+
+  return (typeOffers.offers && typeOffers.offers.length)
+    ? typeOffers.offers
+    : null;
+};
+
+const getDestinationItem = (destinationName) => `<option value="${destinationName.name}"></option>`;
+
+const getDestinationList = () => DESTINATIONS.map((destination) => getDestinationItem(destination)).join('');
+
+const getEventType = (eventTypeData, currentType) => {
+  const lowerCaseType = eventTypeData.toLowerCase();
+
+  return (
+    `<div class="event__type-item">
+      <input id="event-type-${lowerCaseType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${lowerCaseType}" ${lowerCaseType === currentType.toLowerCase() ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${lowerCaseType}" for="event-type-${lowerCaseType}-1">${eventTypeData}</label>
+    </div>`
+  );
+};
+
+const getEventTypeGroup = (currentType) => TYPES.map((type) => getEventType(type, currentType)).join('');
 
 const getRollupButton = (buttonMode) => {
   if (buttonMode === PointEditorModeButtons.EDIT) {
@@ -93,63 +124,14 @@ const createEventPointEditorTemplate = (editorModeButton, data) => (
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${String(data.type).toLowerCase()}.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${data.type.toLowerCase()}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-
-              <div class="event__type-item">
-                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
-                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-              </div>
+              ${getEventTypeGroup(data.type)}
             </fieldset>
           </div>
         </div>
@@ -191,11 +173,11 @@ const createEventPointEditorTemplate = (editorModeButton, data) => (
 
 export {PointEditorModeButtons};
 export default class EventPointEditor extends SmartView{
-  constructor(editMode, point) {
+  constructor(mode, point) {
     super();
 
     this._data = EventPointEditor.parsePointToData(point);
-    this._editMode = editMode;
+    this._mode = mode;
 
     this._clickRollupHandler = this._clickRollupHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -209,7 +191,7 @@ export default class EventPointEditor extends SmartView{
   }
 
   getTemplate() {
-    return createEventPointEditorTemplate(this._editMode, this._data);
+    return createEventPointEditorTemplate(this._mode, this._data);
   }
 
   reset(point) {
@@ -251,63 +233,39 @@ export default class EventPointEditor extends SmartView{
     this._callback.formSubmit(EventPointEditor.parseDataToPoint(this._data));
   }
 
-  _getNewOffers(pointType) {
-    const typeOffers = OFFERS.find((element) => element.type === pointType);
-
-    return (typeOffers.offers && typeOffers.offers.length)
-      ? typeOffers.offers
-      : [];
-  }
-
-  _getNewDescription(newDestinationName) {
-    const destinationDescription = sortedPoints.find((element) => element.destination.name === newDestinationName);
-
-    return (destinationDescription.destination.description
-        && destinationDescription.destination.description.length)
-      ? destinationDescription.destination.description
-      : '';
-  }
-
-  _getNewPhotos(newDestinationName) {
-    const destinationDescription = sortedPoints.find((element) => element.destination.name === newDestinationName);
-
-    return (destinationDescription.destination.pictures
-        && destinationDescription.destination.pictures.length)
-      ? destinationDescription.destination.pictures
-      : [];
-  }
-
   _changeEventTypeHandler(evt) {
     evt.preventDefault();
-    const newOffers = this._getNewOffers(evt.target.value);
 
-    this.updateData(
+    const temp = Object.assign(
+      {},
+      this._data,
       {
         type: evt.target.value,
         offers: {
-          offers: newOffers,
+          offers: getNewOffers(evt.target.value),
         },
-        isOffers: Boolean(newOffers && newOffers.length),
       },
     );
+
+    this.updateData(EventPointEditor.parsePointToData(temp));
   }
 
   _changeDestinationHandler(evt) {
     evt.preventDefault();
-    const newDescription = this._getNewDescription(evt.target.value);
-    const newPhotos = this._getNewPhotos(evt.target.value);
 
-    this.updateData(
+    const temp = Object.assign(
+      {},
+      this._data,
       {
         destination: {
           name: evt.target.value,
-          description: newDescription,
-          pictures: newPhotos,
+          description: getNewDestinationFieldValue(evt.target.value, 'description'),
+          pictures: getNewDestinationFieldValue(evt.target.value, 'pictures'),
         },
-        isDescription: Boolean(newDescription && newDescription.length),
-        isPhotos: Boolean(newPhotos && newPhotos.length),
       },
     );
+
+    this.updateData(EventPointEditor.parsePointToData(temp));
   }
 
   _changeDateFromHandler(evt) {
@@ -346,9 +304,9 @@ export default class EventPointEditor extends SmartView{
       {},
       point,
       {
-        isOffers: !!(point.offers.offers && point.offers.offers.length),
-        isDescription: !!(point.destination.description && point.destination.description.length),
-        isPhotos: !!(point.destination.pictures && point.destination.pictures.length),
+        isOffers: Boolean(point.offers.offers && point.offers.offers.length),
+        isDescription: Boolean(point.destination.description && point.destination.description.length),
+        isPhotos: Boolean(point.destination.pictures && point.destination.pictures.length),
       },
     );
   }

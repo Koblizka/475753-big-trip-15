@@ -1,7 +1,7 @@
 import {
   WAY_POINT_AMOUNT,
   TYPES,
-  DESCRIPTIONS,
+  DESTINATIONS,
   OFFERS,
   DAY_GAP,
   TIME_GAP,
@@ -35,7 +35,7 @@ export const generatePoint = () => ({
   basePrice: getRandomInteger(BasePrice.MIN, BasePrice.MAX),
   dateFrom: getRandomArrivalDates().dateFrom,
   dateTo: getRandomArrivalDates().dateTo,
-  destination: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)],
+  destination: DESTINATIONS[getRandomInteger(0, DESTINATIONS.length - 1)],
   id: nanoid(),
   isFavorite: Boolean(getRandomInteger(0, 1)),
   offers: OFFERS[getRandomInteger(0, OFFERS.length - 1)],

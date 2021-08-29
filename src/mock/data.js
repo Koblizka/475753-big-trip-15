@@ -192,7 +192,7 @@ const OFFERS = [
   },
 ];
 
-const DESCRIPTIONS = [
+const DESTINATIONS = [
   {
     name: 'Chamonix',
     description: 'Chamonix, middle-eastern paradise, a perfect place to stay with a family, famous for its crowded street markets with the best street food in Asia.',
@@ -311,7 +311,7 @@ const BasePrice = {
 export {
   WAY_POINT_AMOUNT,
   TYPES,
-  DESCRIPTIONS,
+  DESTINATIONS,
   OFFERS,
   DAY_GAP,
   TIME_GAP,
