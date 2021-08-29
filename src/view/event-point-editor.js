@@ -176,7 +176,7 @@ export default class EventPointEditor extends SmartView{
   constructor(mode, point) {
     super();
 
-    this._data = EventPointEditor.parsePointToData(point);
+    this._data = point;
     this._mode = mode;
 
     this._clickRollupHandler = this._clickRollupHandler.bind(this);
@@ -191,7 +191,7 @@ export default class EventPointEditor extends SmartView{
   }
 
   getTemplate() {
-    return createEventPointEditorTemplate(this._mode, this._data);
+    return createEventPointEditorTemplate(this._mode, EventPointEditor.parsePointToData(this._data));
   }
 
   reset(point) {
@@ -236,9 +236,7 @@ export default class EventPointEditor extends SmartView{
   _changeEventTypeHandler(evt) {
     evt.preventDefault();
 
-    const temp = Object.assign(
-      {},
-      this._data,
+    this.updateData(
       {
         type: evt.target.value,
         offers: {
@@ -246,16 +244,12 @@ export default class EventPointEditor extends SmartView{
         },
       },
     );
-
-    this.updateData(EventPointEditor.parsePointToData(temp));
   }
 
   _changeDestinationHandler(evt) {
     evt.preventDefault();
 
-    const temp = Object.assign(
-      {},
-      this._data,
+    this.updateData(
       {
         destination: {
           name: evt.target.value,
@@ -264,8 +258,6 @@ export default class EventPointEditor extends SmartView{
         },
       },
     );
-
-    this.updateData(EventPointEditor.parsePointToData(temp));
   }
 
   _changeDateFromHandler(evt) {
