@@ -7,7 +7,7 @@ const getDate = (daysGap = 0, hoursGap = 0, minutesGap = 0) => {
   return dayjs(hours).add(minutesGap, 'minutes');
 };
 
-const getFormatedDate = (date) => dayjs(date).format('YY/MM/DD HH:MM');
+const getFormatedDate = (date) => dayjs(date).format('DD/MM/YY HH:MM');
 const getIsoDate = (date) => dayjs(date).format('YYYY-MM-DD[T]HH:mm[:00]');
 const getTime = (date) => dayjs(date).format('HH:mm');
 const getDayMonthFormatDate = (date) => dayjs(date).format('MMM DD');

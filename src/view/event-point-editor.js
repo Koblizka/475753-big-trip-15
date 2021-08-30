@@ -1,41 +1,20 @@
-import { getFormatedDate } from '../utils/date.js';
+import { getFormatedDate} from '../utils/date.js';
 import {
-  OFFERS,
+  getOfferName,
+  getNewDestinationFieldValue,
+  getNewOffers
+} from '../utils/point.js';
+import {
   TYPES,
   DESTINATIONS } from '../mock/data.js';
 import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
 
-const OFFER_NAME_LENGTH = 2;
-const OFFER_NAME_WORD_LENGTH = 1;
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const PointEditorModeButtons = {
   EDIT: 'Delete',
   CREATE: 'Cancel',
-};
-
-const getOfferName = (offerTitle) => {
-  const tempName = offerTitle.split(' ');
-
-  return (tempName.length <= OFFER_NAME_LENGTH)
-    ? tempName.pop()
-    : tempName.slice(-OFFER_NAME_LENGTH, -OFFER_NAME_WORD_LENGTH).pop();
-};
-
-const getNewDestinationFieldValue = (lookingValue, lookingField) => {
-  const destinationField = DESTINATIONS.find((element) => element.name === lookingValue);
-
-  return (destinationField[lookingField]
-      && destinationField[lookingField].length)
-    ? destinationField[lookingField]
-    : null;
-};
-
-const getNewOffers = (lookingValue) => {
-  const typeOffers = OFFERS.find((element) => element.type === lookingValue);
-
-  return (typeOffers.offers && typeOffers.offers.length)
-    ? typeOffers.offers
-    : null;
 };
 
 const getDestinationItem = (destinationName) => `<option value="${destinationName.name}"></option>`;
@@ -148,10 +127,10 @@ const createEventPointEditorTemplate = (editorModeButton, data) => (
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedDate(data.dateFrom)}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${data.dateFrom}">
           —
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatedDate(data.dateTo)}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${data.dateTo}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -178,6 +157,8 @@ export default class EventPointEditor extends SmartView{
 
     this._data = point;
     this._mode = mode;
+    this._datepickrFrom = null;
+    this._datepickrTo = null;
 
     this._clickRollupHandler = this._clickRollupHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -188,6 +169,9 @@ export default class EventPointEditor extends SmartView{
     this._changePriceHandler = this._changePriceHandler.bind(this);
 
     this._setInnerHandlers();
+
+    this._setDatepickrFrom();
+    this._setDatepickrTo();
   }
 
   getTemplate() {
@@ -212,14 +196,69 @@ export default class EventPointEditor extends SmartView{
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepickrFrom();
+    this._setDatepickrTo();
     this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  _setDatepickrFrom() {
+    if (this._datepickrFrom) {
+      this._datepickrFrom.destroy();
+      this._datepickrFrom = null;
+    }
+
+    this._datepickrFrom = flatpickr(
+      this.getElement().querySelector('#event-start-time-1'),
+      {
+        enableTime: true,
+        'time_24hr': true,
+        dateFormat: 'j/m/Y H:i',
+        defaultDate: getFormatedDate(this._data.dateFrom),
+        onChange: this._changeDateFromHandler,
+        minDate: getFormatedDate(this._data.dateFrom),
+      },
+    );
+  }
+
+  _setDatepickrTo() {
+    if (this._datepickrTo) {
+      this._datepickrTo.destroy();
+      this._datepickrTo = null;
+    }
+
+    this._datepickrTo = flatpickr(
+      this.getElement().querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        'time_24hr': true,
+        dateFormat: 'j/m/Y H:i',
+        defaultDate: getFormatedDate(this._data.dateTo),
+        onChange: this._changeDateToHandler,
+        minDate: getFormatedDate(this._data.dateFrom),
+      },
+    );
+  }
+
+  _changeDateFromHandler([userDate]) {
+    this.updateData(
+      {
+        dateFrom: userDate,
+        dateTo: (this._data.dateTo < userDate) ? userDate : this._data.dateTo,
+      },
+    );
+  }
+
+  _changeDateToHandler([userDate]) {
+    this.updateData(
+      {
+        dateTo: userDate,
+      },
+    );
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._changeEventTypeHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
-    this.getElement().querySelector('.event__field-group--time').addEventListener('input', this._changeDateFromHandler);
-    this.getElement().querySelector('.event__field-group--time').addEventListener('input', this._changeDateToHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._changePriceHandler);
   }
 
@@ -258,26 +297,6 @@ export default class EventPointEditor extends SmartView{
         },
       },
     );
-  }
-
-  _changeDateFromHandler(evt) {
-    evt.preventDefault();
-
-    this.updateData(
-      {
-        dateFrom: evt.target.value,
-      },
-      true);
-  }
-
-  _changeDateToHandler(evt) {
-    evt.preventDefault();
-
-    this.updateData(
-      {
-        dateFrom: evt.target.value,
-      },
-      true);
   }
 
   _changePriceHandler(evt) {
