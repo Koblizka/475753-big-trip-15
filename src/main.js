@@ -14,7 +14,7 @@ import {
   render,
   replace
 } from './utils/render.js';
-
+const 
 const headerMainInfoElement = document.querySelector('.trip-main');
 const headerNavigationElement = headerMainInfoElement.querySelector('.trip-controls__navigation');
 const headerFiltersElement = headerMainInfoElement.querySelector('.trip-controls__filters');
